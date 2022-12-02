@@ -25,7 +25,7 @@ public class Day01 {
 
 		System.out.println( "\n---[ Part 2 ]---" );
 		System.out.println( "Example: " + mostCalories( ex_input, 3 ) );
-		System.out.println( "Part 2 : " + mostCalories( input, 3 ) );
+		System.out.println( "Answer : " + mostCalories( input, 3 ) );
 	}
 	
 	/**
