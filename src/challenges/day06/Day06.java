@@ -28,45 +28,33 @@ public class Day06 {
 			System.out.println( "Example: " + findInBuffer( s, 14 ) );
 		System.out.println( "Answer : " + findInBuffer( input.get( 0 ), 14 ) );
 	}
-
+	
 	/**
 	 * Finds a signal marker in the buffer that is given by the first time any
-	 * sequence of given size of unique characters is found.  
+	 * sequence of given size of unique characters is found. This uses a window
+	 * based scanning.
 	 * 
 	 * @param input The input buffer
 	 * @param size The size of the unique sequence to find
 	 * @return The first index after the unique sequence of requested size 
-	 */
+  */
 	protected static long findInBuffer( final String input, final int size ) {
-		// initialise scanning buffer with first part of the string, then process
-		// characters one by one
-		String buff = input.substring( 0, size );
-		int idx = size - 1;
+		int moreThanOne = 0;
+		final int[] counts = new int[ 26 ];
+		int idx = -1;
+		
 		while( ++idx < input.length( ) ) {
-			// check if we found a marker
-			if( checkUnique( buff ) ) return idx;
+			// add new character, and keep adding until we have reached minimum buffer size
+			final int cidx = input.charAt( idx ) - 'a';
+			if( ++counts[ cidx ] == 2 ) moreThanOne++;
+			if( idx < size ) continue;
 			
-			// no, are we done?
-			if( idx == input.length( ) ) break;
+			// drop the oldest one
+			final int oldcidx = input.charAt( idx - size ) - 'a';
+			if( --counts[ oldcidx ] == 1 ) moreThanOne--;
 			
-			// put next char in FIFO buffer of given size
-			buff = buff.substring( 1 ) + input.charAt( idx );
+			if( idx >= size && moreThanOne == 0 ) return idx+1;
 		}
 		return -1;
-	}
-	
-	/**
-	 * Checks if all characters are unique in a buffer string
-	 * 
-	 * @param str the buffer string
-	 * @return True if no character occurs twice, false otherwise
-	 */
-	protected static boolean checkUnique( final String str ) {
-		// do a simple pairwise check to find duplicate characters
-		for( int i = 0; i < str.length( ); i++ )
-			for( int j = i + 1; j < str.length( ); j++ )
-				if( str.charAt( i ) == str.charAt( j ) ) return false;
-		
-		return true;
 	}
 }
