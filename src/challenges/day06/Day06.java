@@ -38,16 +38,18 @@ public class Day06 {
 	 * @return The first index after the unique sequence of requested size 
 	 */
 	protected static long findInBuffer( final String input, final int size ) {
+		// initialise scanning buffer with first part of the string, then process
+		// characters one by one
 		String buff = input.substring( 0, size );
 		int idx = size - 1;
 		while( ++idx < input.length( ) ) {
 			// check if we found a marker
 			if( checkUnique( buff ) ) return idx;
 			
-			// no, are we done
-			if( idx == input.length( ) - 1 ) break;
+			// no, are we done?
+			if( idx == input.length( ) ) break;
 			
-			// check next char
+			// put next char in FIFO buffer of given size
 			buff = buff.substring( 1 ) + input.charAt( idx );
 		}
 		return -1;
