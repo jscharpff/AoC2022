@@ -43,19 +43,20 @@ public class CargoHold {
 	 */
 	public void move( final String action ) {
 		final RegexMatcher rm = RegexMatcher.match( "move #D from #D to #D", action );
+		final int num = rm.getInt( 1 );
+		final int from = rm.getInt( 2 ) - 1;
+		final int to = rm.getInt( 3 ) - 1;
 		
 		if( is9000 ) {
 			// move crates one by one
-			for( int i = 0; i < rm.getInt( 1 ); i++ )
-				stacks.get( rm.getInt( 3 ) - 1 ).push( stacks.get( rm.getInt( 2 ) - 1 ).pop( ) );
+			for( int i = 0; i < num; i++ )
+				stacks.get( to ).push( stacks.get( from ).pop( ) );
 		} else {
 			// use intermediate stack to still move one by one while preserving the
 			// original order
 			final Stack<Character> temp = new Stack<>( );
-			for( int i = 0; i < rm.getInt( 1 ); i++ )
-				temp.push( stacks.get( rm.getInt( 2 ) - 1 ).pop( ) );
-			while( !temp.isEmpty( ) )
-				stacks.get( rm.getInt( 3 ) - 1 ).push( temp.pop( ) );							
+			for( int i = 0; i < num; i++ ) temp.push( stacks.get( from ).pop( ) );
+			while( !temp.isEmpty( ) )	stacks.get( to ).push( temp.pop( ) );							
 		}
 	}
 	
