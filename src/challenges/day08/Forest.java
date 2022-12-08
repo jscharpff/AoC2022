@@ -71,12 +71,7 @@ public class Forest {
 	 * @return The maximum score
 	 */
 	public long maxViewScore( ) {
-		long max = -1;
-		for( final Coord2D c : trees ) {
-			final long score = getViewScore( c );
-			if( score > max ) max = score;
-		}
-		return max;
+		return trees.stream( ).mapToLong( this::getViewScore ).max( ).orElse( -1 );
 	}
 
 	/**
