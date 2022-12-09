@@ -14,7 +14,7 @@ import aocutil.geometry.Direction;
  * @author Joris
  */
 public class RopeSim {
-	/** The list of knots in the rope, head being the first tail the last*/
+	/** The list of knots in the rope, head being the first tail the last */
 	private Coord2D[] knots;
 	
 	/**
@@ -67,13 +67,15 @@ public class RopeSim {
 		// then for all following knots, update position according to the knot
 		// previous to it
 		for( int i = 1; i < knots.length; i++ ) {
-			// determine new position of the tail as a result of the head moving
+			// get positional difference and absolute distance
 			final Coord2D d = knots[i].diff( knots[i-1] );
 			final int dx = Math.abs( d.x );
 			final int dy = Math.abs( d.y );
+			
+			// is my predecessor at least 2 steps away in any direction?
 			if( dx >= 2 || dy >= 2 ) {
-				// move at most 1 step in the direction of the previous knot,
-				// depending on the difference in row and/or column
+				// yes, move at most 1 step in the direction of the previous knot
+				// per axis, depending on the difference in row and/or column
 				knots[i] = knots[i].move( dx > 0 ? d.x / dx : 0, dy > 0 ? d.y / dy : 0 );
 			}
 		}
