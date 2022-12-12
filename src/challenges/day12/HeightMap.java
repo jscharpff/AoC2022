@@ -93,8 +93,7 @@ public class HeightMap {
 				visited.set( curr, dist );
 				
 				// check whether we can traverse to its neighbours
-				final Set<Coord2D> N = new HashSet<>( curr.getAdjacent( false ) );
-				for( final Coord2D n : N ) {
+				for( final Coord2D n : new HashSet<>( curr.getAdjacent( false ) ) ) {
 					// only check positions within the grid that have not been explored yet
 					if( !heights.contains( n ) || visited.hasValue( n ) ) continue;
 					
