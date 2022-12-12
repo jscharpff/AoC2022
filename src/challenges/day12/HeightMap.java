@@ -52,10 +52,9 @@ public class HeightMap {
 	 * @return The minimal distance from any zero-level height to the end
 	 */
 	public long findBestStartPath( ) {
-		// return smallest path distance over all zero-elevation coordinates that
-		// can reach the target (i.e., not resulting in a path of length -1)
+		// return smallest path distance over all zero-elevation coordinates
 		return heights.stream( ).filter( c -> heights.get( c ) == 0 )
-				.mapToLong( D::get ).filter( x -> x != -1 ).min( ).orElse( -1 );
+				.mapToLong( D::get ).min( ).orElse( -1 );
 	}
 	
 	/**
@@ -73,8 +72,9 @@ public class HeightMap {
 	 * @return The map of distances from each coordinate to the target
 	 */
 	private CoordGrid<Integer> buildDistMatrix( final Coord2D target ) {
+		// initialise the algorithm with the target as starting coordinate and
+		// build the distance matrix to all coordinates from there
 		final CoordGrid<Integer> visited = new CoordGrid<Integer>( Integer.MAX_VALUE );
-		
 		int dist = 0;
 		final Stack<Coord2D> E = new Stack<>( );
 		visited.set( target, dist );
