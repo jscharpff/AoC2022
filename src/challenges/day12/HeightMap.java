@@ -19,7 +19,7 @@ public class HeightMap {
 	protected final CoordGrid<Integer> heights;
 	
 	/** The distance matrix from all positions to the end coordinate */
-	protected final CoordGrid<Integer> D;
+	private final CoordGrid<Integer> D;
 	
 	/** The start coordinate */
 	protected final Coord2D start;
@@ -52,19 +52,14 @@ public class HeightMap {
 	 * @return The minimal distance from any zero-level height to the end
 	 */
 	public long findBestStartPath( ) {
-		long best = Long.MAX_VALUE;
-		for( final Coord2D c : heights ) {
-			if( heights.get( c ) == 0 ) {
-				final long length = D.get( c );
-				if( length != -1 && length < best ) best = length;
-			}
-		}
-		return best;
+		// return smallest path distance over all zero-elevation coordinates that
+		// can reach the target (i.e., not resulting in a path of length -1)
+		return heights.stream( ).filter( c -> heights.get( c ) == 0 )
+				.mapToLong( D::get ).filter( x -> x != -1 ).min( ).orElse( -1 );
 	}
 	
 	/**
-	 * @return Finds the shortest path length from the start coordinate to the
-	 *   end coordinate.
+	 * @return The shortest path length from the start coordinate to the end
 	 */
 	public long findShortestPath( ) {
 		return D.get( start );
@@ -74,7 +69,7 @@ public class HeightMap {
 	 * Builds a distance matrix from the given target position to all other
 	 * reachable coordinates in the height map
 	 * 
-	 * @param target The target position to start epxloration from
+	 * @param target The target position to start exploration from
 	 * @return The map of distances from each coordinate to the target
 	 */
 	private CoordGrid<Integer> buildDistMatrix( final Coord2D target ) {
@@ -89,9 +84,10 @@ public class HeightMap {
 		while( !E.isEmpty( ) ) {
 			final Set<Coord2D> newE = new HashSet<>( );
 			
-			// explore at the current distance level
+			// explore new set of coordinates at the current distance level
 			while( !E.isEmpty( ) ) {
-				// next coordinate to check
+				// next coordinate to check, store distance to it and explore its
+				// neighbours (if valid)
 				final Coord2D curr = E.pop( );
 				final int h = heights.get( curr );
 				visited.set( curr, dist );
@@ -99,14 +95,11 @@ public class HeightMap {
 				// check whether we can traverse to its neighbours
 				final Set<Coord2D> N = new HashSet<>( curr.getAdjacent( false ) );
 				for( final Coord2D n : N ) {
-					// only check positions within the grid
-					if( !heights.contains( n ) ) continue;
+					// only check positions within the grid that have not been explored yet
+					if( !heights.contains( n ) || visited.hasValue( n ) ) continue;
 					
 					// explore only if the height is at most one lower than the current height 
 					if( heights.get( n ) < h - 1 ) continue;
-					
-					// and only if this was not visited before
-					if( visited.hasValue( n ) ) continue;				
 					
 					// valid position to explore next
 					newE.add( n );
@@ -139,12 +132,15 @@ public class HeightMap {
 		for( final Coord2D c : charmap ) {
 			final char ch = charmap.get( c );
 			if( ch == 'S' ) {
+				// start coordinate, store it and set height to 0
 				map.set( c, 0 );
 				start = c;				
 			} else if( ch == 'E' ) {
+				// end coordinate, store and set height to max ('z', thus 25)
 				map.set( c, 25 );
 				end = c;
 			} else {
+				// regular coordinate, parse height level
 				map.set( c, charmap.get( c ) - 'a' );
 			}
 		}
