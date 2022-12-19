@@ -9,8 +9,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import aocutil.cache.Cache;
+import aocutil.cache.Cache.PruneStrategy;
 import aocutil.string.RegexMatcher;
-import challenges.day16.volcano.Cache.PruneStrategy;
 
 /**
  * A volcano with valves (?) that regulate the pressure inside and a bunch of
