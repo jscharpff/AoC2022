@@ -128,17 +128,21 @@ public class LinkedList<V> implements Iterable<LLNode<V>> {
 		int s = (int)(steps % (long)(size() - 1));
 		if( s == 0 ) return;
 		
+		// optimise shifting direction
+		final int n = size( );
+		if( Math.abs( s ) > n / 2 ) s = s < 0 ? n + s - 1 : s - n + 1;
+
 		// move head by one if that is the node we are shifting
 		if( node.equals( head ) ) 
 			if( steps < 0 ) { head = head.prev; } 
 			else { head = head.next; }
-		
+
+		// remove from old position
+		node.prev.next = node.next;
+		node.next.prev = node.prev;		
+
 		// keep shifting for the desired number of steps
 		while( s != 0 ) {
-			// remove from old position
-			node.prev.next = node.next;
-			node.next.prev = node.prev;		
-			
 			// shift the node into the right position
 			if( s > 0 ) {
 				s--;
@@ -149,11 +153,11 @@ public class LinkedList<V> implements Iterable<LLNode<V>> {
 				node.next = node.prev;
 				node.prev = node.prev.prev;
 			}
-			
-			// insert in new position
-			node.prev.next = node;
-			node.next.prev = node;		
 		}
+		
+		// insert in new position
+		node.prev.next = node;
+		node.next.prev = node;		
 		
 	}
 	
