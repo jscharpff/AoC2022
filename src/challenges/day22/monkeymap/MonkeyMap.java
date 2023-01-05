@@ -85,7 +85,7 @@ public class MonkeyMap {
 		Player p = new Player( player.pos, player.dir );
 		for( int i = 0; i < steps; i++ ) {
 			// determine target position and check if we can move
-			Player next = new Player( p.pos.moveDir( p.dir, 1 ), p.dir );
+			Player next = new Player( p.pos.move( p.dir, 1 ), p.dir );
 			
 			// next position off the map? then wrap around
 			if( map.get( next.pos ) == Tile.Empty ) next = wrap( p );

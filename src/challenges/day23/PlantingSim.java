@@ -86,8 +86,8 @@ public class PlantingSim {
 				final Direction d = DIRS[(i + round) % DIRS.length];
 				
 				// check if the elves has no neighbour in this direction
-				final Coord2D m = elf.moveDir( d, 1 );
-				if( grid.hasValue( m ) || grid.hasValue( m.moveDir( d.turn( -1 ), 1 ) ) || grid.hasValue( m.moveDir( d.turn( 1 ), 1 ) ) ) continue;
+				final Coord2D m = elf.move( d, 1 );
+				if( grid.hasValue( m ) || grid.hasValue( m.move( d.turn( -1 ), 1 ) ) || grid.hasValue( m.move( d.turn( 1 ), 1 ) ) ) continue;
 				
 				// nope, propose move
 				moves.add( new ElfMove( elf, m ) );

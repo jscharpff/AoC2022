@@ -62,7 +62,7 @@ public class RopeSim {
 	 */
 	protected void move( Direction dir ) {
 		// move the head in the specified direction
-		knots[0] = knots[0].moveDir( dir, 1 );
+		knots[0] = knots[0].move( dir, 1 );
 		
 		// then for all following knots, update position according to the knot
 		// previous to it

@@ -163,7 +163,7 @@ public class BlizzardBasin {
 		// consider a move in all directions
 		for( final Direction d : Direction.values( ) ) {
 			// test only valid positions
-			final Coord2D pos = state.pos.moveDir( d, 1 );
+			final Coord2D pos = state.pos.move( d, 1 );
 			if( !isValid( pos ) || isOccupied( pos, t ) ) continue;
 			
 			N.add( new State( pos, t, state.target ) );

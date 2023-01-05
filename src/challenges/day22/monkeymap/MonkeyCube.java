@@ -83,7 +83,7 @@ public class MonkeyCube extends MonkeyMap {
 			for( final CubeFace next : faces ) {
 				if( next.equals( f ) ) continue;
 				
-				if( next.topleft.equals( f.topleft.moveDir( d, cubesize ) ) ) {
+				if( next.topleft.equals( f.topleft.move( d, cubesize ) ) ) {
 					f.Tmap.put( d, new Transform( next, 0 ) );					
 					findNeighbours( next );
 				}
@@ -126,8 +126,16 @@ public class MonkeyCube extends MonkeyMap {
 	 * @param input The list of strings describing the map tiles and cube layout
 	 * @return The MonkeyCube
 	 */
-	public static MonkeyCube fromStringList( final List<String> input, final int cubesize ) {
-		return new MonkeyCube( CoordGrid.fromStringList( input, "", t -> Tile.fromChar( t.charAt( 0 ) ), Tile.Empty ), cubesize );
+	public static MonkeyCube fromStringList( final List<String> input ) {
+		// first determine cube size. An unfolded cube must always be 4 faces wide
+		// and 3 faces tall or vice versa, so find the biggest of the two and
+		// divide by 4 to get the edge size
+		final int H = input.size( );
+		final int W = input.stream( ).mapToInt( i -> i.length( ) ).max( ).orElse( 0 );		
+		int csize = Math.max( H, W ) / 4;		
+		
+		// then reconstruct the Monkey Cube
+		return new MonkeyCube( CoordGrid.fromStringList( input, "", t -> Tile.fromChar( t.charAt( 0 ) ), Tile.Empty ), csize );
 	}
 
 	/**
@@ -145,7 +153,7 @@ public class MonkeyCube extends MonkeyMap {
 		final Transform t = curr.Tmap.get( player.dir );
 		
 		// get new player coordinates against (0,0)-(size-1,size-1) reference frame
-		final Coord2D move = player.pos.moveDir( player.dir, 1 ).move( -curr.topleft.x, -curr.topleft.y );
+		final Coord2D move = player.pos.move( player.dir, 1 ).move( -curr.topleft.x, -curr.topleft.y );
 		final int refx = (move.x + cubesize) % cubesize;
 		final int refy = (move.y + cubesize) % cubesize;
 

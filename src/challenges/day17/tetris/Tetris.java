@@ -94,11 +94,11 @@ public class Tetris {
 				final Direction m = Direction.fromSymbol( moves.charAt( currmove ) );
 				
 				// first try to move it sideways
-				if( canMove( s, p, m ) ) p = p.moveDir( m, 1 );
+				if( canMove( s, p, m ) ) p = p.move( m, 1 );
 				
 				// then check if it can move downwards
 				if( canMove( s, p, Direction.South ) ) {
-					p = p.moveDir( Direction.South, 1 );
+					p = p.move( Direction.South, 1 );
 				} else {
 					// no longer possible, next block
 					falling = false;
@@ -122,7 +122,7 @@ public class Tetris {
 	 * @return True iff the rock can still move, false if it is blocked
 	 */
 	protected boolean canMove( final TShape shape, final Coord2D pos, final Direction dir ) {
-		final Coord2D tpos = pos.moveDir( dir, 1 );
+		final Coord2D tpos = pos.move( dir, 1 );
 		
 		// check boundaries to rough outline
 		if( tpos.x < 0 ) return false;

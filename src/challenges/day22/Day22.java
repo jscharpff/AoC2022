@@ -26,8 +26,8 @@ public class Day22 {
 		System.out.println( "Answer : " + part1( input ) );
 
 		System.out.println( "\n---[ Part 2 ]---" );
-		System.out.println( "Example: " + part2( ex_input, 4 ) );
-		System.out.println( "Answer : " + part2( input, 50 ) );
+		System.out.println( "Example: " + part2( ex_input ) );
+		System.out.println( "Answer : " + part2( input ) );
 	}
 	
 	/**
@@ -51,9 +51,9 @@ public class Day22 {
 	 * @param input The map layout and list of movements as a list of strings
 	 * @return The coordinate and direction code after processing all moves
 	 */
-	protected static long part2( final List<String> input, final int cubesize ) {
+	protected static long part2( final List<String> input ) {
 		final List<String> map = new ArrayList<>( input );
 		for( int i = 0; i < 2; i++ ) map.remove( map.size( ) - 1 );
-		final MonkeyCube mm = MonkeyCube.fromStringList( map, cubesize );
+		final MonkeyCube mm = MonkeyCube.fromStringList( map );
 		return mm.navigate( input.get( input.size( ) - 1 ) );	}
 }

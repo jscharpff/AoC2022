@@ -27,6 +27,7 @@ public class Range {
 	 * Creates a range from a string description
 	 * 
 	 * @param range The range as a string: x-y
+	 * @return The range [x,y] described by the string
 	 */
 	public static Range fromString( final String range ) {
 		final String[] s = range.split( "-" );

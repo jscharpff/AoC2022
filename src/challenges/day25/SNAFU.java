@@ -39,13 +39,13 @@ public class SNAFU {
 	 * @param number The regular, base 10 number to convert
 	 * @return The SNAFU encoding 
 	 */
-	public static String encode( final long num ) {
+	public static String encode( final long number ) {
 		// find first power of 5 that exceeds the number if multiplied twice
 		int n = 0;
-		while( Math.pow( 5, (++n + 1) ) / 2 < num ) { }
+		while( Math.pow( 5, (++n + 1) ) / 2 < number ) { }
 		
 		// then encode the number by working backwards
-		return encode( "", n, num );	
+		return encode( "", n, number );	
 	}
 	
 	/**
